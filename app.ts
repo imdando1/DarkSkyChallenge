@@ -8,6 +8,7 @@ import * as ejs from 'ejs';
 
 import routes from './routes/index';
 import users from './routes/users';
+import apiKeyRoute from './routes/apiKey.Route';
 
 let app = express();
 
@@ -29,6 +30,7 @@ app.use('/api', express.static(path.join(__dirname, 'api')));
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/api/apikey', apiKeyRoute);
 
 
 // redirect 404 to home for the sake of AngularJS client-side routes
