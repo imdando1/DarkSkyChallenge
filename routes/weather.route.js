@@ -12,7 +12,7 @@ weatherRoute.post('/', function (req, res) {
         .longitude(req.body.longitude)
         .units('auto')
         .language('en')
-        .exclude('minutely, daily')
+        .exclude('minutely')
         .time(date)
         .get()
         .then(function (data) {
@@ -21,6 +21,8 @@ weatherRoute.post('/', function (req, res) {
         .catch(function (err) {
         res.json(err);
     });
+});
+weatherRoute.post('/:weekly', function (req, res) {
 });
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = weatherRoute;

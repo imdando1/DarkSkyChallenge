@@ -16,7 +16,7 @@ weatherRoute.post('/', (req, res)=>{
         .longitude(req.body.longitude)
         .units('auto')
         .language('en')
-        .exclude('minutely, daily')
+        .exclude('minutely')
         .time(date)
         .get()
         .then((data)=>{
@@ -25,6 +25,10 @@ weatherRoute.post('/', (req, res)=>{
         .catch((err)=>{
             res.json(err);
         });
+});
+
+weatherRoute.post('/:weekly', (req, res)=>{
+
 });
 
 

@@ -3,8 +3,11 @@ var darksky;
     var Controllers;
     (function (Controllers) {
         var WeekController = (function () {
-            function WeekController() {
+            function WeekController(weatherService) {
+                this.weatherService = weatherService;
             }
+            WeekController.prototype.getWeeklyWeather = function () {
+            };
             return WeekController;
         }());
         Controllers.WeekController = WeekController;

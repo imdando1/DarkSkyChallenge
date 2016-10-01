@@ -4,31 +4,8 @@ namespace darksky.Controllers {
         public weather;
         public date = new Date();
         public position;
-
-        public chart:any = {
-            label: [],
-            data: [[],[]],
-            series: ['Temperature', 'Wind Speed'],
-            datasetOverride: [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }],
-            options: {
-                scales: {
-                    yAxes: [
-                        {
-                            id: 'y-axis-1',
-                            type: 'linear',
-                            display: true,
-                            position: 'left'
-                        },
-                        {
-                            id: 'y-axis-2',
-                            type: 'linear',
-                            display: true,
-                            position: 'right'
-                        }
-                    ]
-                }
-            }
-        };
+        public zip;
+        public chart:any = chartOptions;
 
         constructor(
             private weatherService: darksky.Services.WeatherService,
@@ -38,10 +15,13 @@ namespace darksky.Controllers {
 
         }
 
+
+
         getWeather(){
-            this.weatherService.getCurrentWeather().then((data:any)=>{
+            this.weatherService.getCurrnetWeather(this.zip).then((data:any)=>{
                 console.log(data);
                 this.weather = data;
+                this.resetData();
                 this.setData(data.hourly.data);
             });
         }
@@ -53,5 +33,37 @@ namespace darksky.Controllers {
                 this.chart.data[1].push(i.windSpeed);
             }
         }
+
+        private resetData(){
+            this.chart.label.length = 0;
+            this.chart.data[0].length = 0;
+            this.chart.data[1].length = 0;
+        }
     }
+
+
+    let chartOptions = {
+        label: [],
+        data: [[],[]],
+        series: ['Temperature', 'Wind Speed'],
+        datasetOverride: [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }],
+        options: {
+            scales: {
+                yAxes: [
+                    {
+                        id: 'y-axis-1',
+                        type: 'linear',
+                        display: true,
+                        position: 'left'
+                    },
+                    {
+                        id: 'y-axis-2',
+                        type: 'linear',
+                        display: true,
+                        position: 'right'
+                    }
+                ]
+            }
+        }
+    };
 }

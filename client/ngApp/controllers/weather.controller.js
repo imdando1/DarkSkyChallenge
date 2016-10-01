@@ -8,37 +8,15 @@ var darksky;
                 this.$geolocation = $geolocation;
                 this.$http = $http;
                 this.date = new Date();
-                this.chart = {
-                    label: [],
-                    data: [[], []],
-                    series: ['Temperature', 'Wind Speed'],
-                    datasetOverride: [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }],
-                    options: {
-                        scales: {
-                            yAxes: [
-                                {
-                                    id: 'y-axis-1',
-                                    type: 'linear',
-                                    display: true,
-                                    position: 'left'
-                                },
-                                {
-                                    id: 'y-axis-2',
-                                    type: 'linear',
-                                    display: true,
-                                    position: 'right'
-                                }
-                            ]
-                        }
-                    }
-                };
+                this.chart = chartOptions;
                 this.getWeather();
             }
             WeatherController.prototype.getWeather = function () {
                 var _this = this;
-                this.weatherService.getCurrentWeather().then(function (data) {
+                this.weatherService.getCurrnetWeather(this.zip).then(function (data) {
                     console.log(data);
                     _this.weather = data;
+                    _this.resetData();
                     _this.setData(data.hourly.data);
                 });
             };
@@ -50,8 +28,37 @@ var darksky;
                     this.chart.data[1].push(i.windSpeed);
                 }
             };
+            WeatherController.prototype.resetData = function () {
+                this.chart.label.length = 0;
+                this.chart.data[0].length = 0;
+                this.chart.data[1].length = 0;
+            };
             return WeatherController;
         }());
         Controllers.WeatherController = WeatherController;
+        var chartOptions = {
+            label: [],
+            data: [[], []],
+            series: ['Temperature', 'Wind Speed'],
+            datasetOverride: [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }],
+            options: {
+                scales: {
+                    yAxes: [
+                        {
+                            id: 'y-axis-1',
+                            type: 'linear',
+                            display: true,
+                            position: 'left'
+                        },
+                        {
+                            id: 'y-axis-2',
+                            type: 'linear',
+                            display: true,
+                            position: 'right'
+                        }
+                    ]
+                }
+            }
+        };
     })(Controllers = darksky.Controllers || (darksky.Controllers = {}));
 })(darksky || (darksky = {}));

@@ -1,6 +1,21 @@
 <div class="weather-main">
     <div class="row">
         <div class="col-md-12">
+            <div class="form-group">
+                <form ng-submit="vm.getWeather()">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <input type="submit" class="btn btn-primary" name="name" value="Get Weather!">
+                        </span>
+                        <input type="text" class="form-control" ng-model="vm.zip" placeholder="ZIP Code...">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
             <h1>{{vm.weather.address}}</h1>
             <h3>{{vm.weather.currently.time * 1000 | date: 'longDate'}}</h3>
             <h3>{{vm.weather.currently.summary}}</h3>
