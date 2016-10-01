@@ -3,7 +3,9 @@ var darksky;
     var Controllers;
     (function (Controllers) {
         var HomeController = (function () {
-            function HomeController() {
+            function HomeController(weatherService) {
+                this.weatherService = weatherService;
+                this.message = "super awesome!!!";
             }
             return HomeController;
         }());

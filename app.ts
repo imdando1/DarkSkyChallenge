@@ -8,7 +8,7 @@ import * as ejs from 'ejs';
 
 import routes from './routes/index';
 import users from './routes/users';
-import apiKeyRoute from './routes/apiKey.Route';
+import weatherRoute from './routes/weather.route';
 
 let app = express();
 
@@ -23,6 +23,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'client')));
 app.use('/lib', express.static(path.join(__dirname, 'bower_components')));
 app.use('/ngApp', express.static(path.join(__dirname, 'client/ngApp')));
 app.use('/css', express.static(path.join(__dirname, 'client/css')));
@@ -30,7 +31,7 @@ app.use('/api', express.static(path.join(__dirname, 'api')));
 
 app.use('/', routes);
 app.use('/users', users);
-app.use('/api/apikey', apiKeyRoute);
+app.use('/api/weather', weatherRoute);
 
 
 // redirect 404 to home for the sake of AngularJS client-side routes

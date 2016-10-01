@@ -1,0 +1,70 @@
+<div class="weather-main">
+    <div class="row">
+        <div class="col-md-6">
+            <h1>{{vm.weather.timezone}}</h1>
+            <h3>{{vm.weather.currently.time * 1000 | date: 'longDate'}}</h3>
+            <h3>{{vm.weather.currently.summary}}</h3>
+            <div class="">
+                <h1>
+                    <i class="wi wi-forecast-io-{{vm.weather.currently.icon}} fa-2x"></i>
+                    {{vm.weather.currently.temperature}}
+                    <a href="#">&deg;F</a> |
+                    <a href="#">&deg;C</a>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-12">
+
+            <table class="table table-borderless">
+                <tr>
+                    <td>
+                        <div class="row">
+                            <div class="col-md-6 text-left">
+                                Temperature(F)
+                            </div>
+                            <div class="col-md-6 text-right">
+                                Wind(mph)
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <canvas id="line" class="chart chart-line" chart-data="vm.chart.data"
+                        chart-labels="vm.chart.label" chart-series="vm.chart.series" chart-options="vm.chart.options"
+                        chart-dataset-override="vm.chart.datasetOverride" chart-click="onClick" height="70%">
+                        </canvas>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                Time(h)
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+
+
+        </div>
+    </div>
+</div>
+<hr>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table">
+            <tr ng-repeat='h in vm.weather.hourly.data'>
+                <td>{{h.time * 1000 | date: 'HH:mm a'}}</td>
+                <td><i class="wi wi-forecast-io-{{h.icon}}"></i></td>
+                <td>{{h.summary}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
