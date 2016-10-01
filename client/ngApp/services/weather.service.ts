@@ -77,7 +77,7 @@ namespace darksky.Services {
         private getAddressByZip(){
             return this.$q((resolve, reject)=>{
                 this.$http
-                    .get(`http://maps.googleapis.com/maps/api/geocode/json?address=${this.zip}`)
+                    .get(`https://maps.googleapis.com/maps/api/geocode/json?address=${this.zip}`)
                     .then((data:any)=>{
                         resolve(data.data.results[0].formatted_address)
                     })
@@ -89,7 +89,7 @@ namespace darksky.Services {
 
         private getCoordByZip(){
             return this.$q((resolve, reject)=>{
-                let URL = `http://maps.googleapis.com/maps/api/geocode/json?address=${this.zip}`;
+                let URL = `https://maps.googleapis.com/maps/api/geocode/json?address=${this.zip}`;
 
                 this.$http
                     .get(URL)
@@ -109,7 +109,7 @@ namespace darksky.Services {
 
         private getZipByCoord(){
             return this.$q((resolve, reject)=>{
-                let URL = `http://maps.googleapis.com/maps/api/geocode/json?latlng=${this.coords.latitude},${this.coords.longitude}&sensor=false`
+                let URL = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.coords.latitude},${this.coords.longitude}&sensor=false`
 
                 this.$http
                     .get(URL)

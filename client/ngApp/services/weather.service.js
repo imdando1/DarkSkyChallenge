@@ -70,7 +70,7 @@ var darksky;
                 var _this = this;
                 return this.$q(function (resolve, reject) {
                     _this.$http
-                        .get("http://maps.googleapis.com/maps/api/geocode/json?address=" + _this.zip)
+                        .get("https://maps.googleapis.com/maps/api/geocode/json?address=" + _this.zip)
                         .then(function (data) {
                         resolve(data.data.results[0].formatted_address);
                     })
@@ -82,7 +82,7 @@ var darksky;
             WeatherService.prototype.getCoordByZip = function () {
                 var _this = this;
                 return this.$q(function (resolve, reject) {
-                    var URL = "http://maps.googleapis.com/maps/api/geocode/json?address=" + _this.zip;
+                    var URL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + _this.zip;
                     _this.$http
                         .get(URL)
                         .then(function (data) {
@@ -99,7 +99,7 @@ var darksky;
             WeatherService.prototype.getZipByCoord = function () {
                 var _this = this;
                 return this.$q(function (resolve, reject) {
-                    var URL = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + _this.coords.latitude + "," + _this.coords.longitude + "&sensor=false";
+                    var URL = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + _this.coords.latitude + "," + _this.coords.longitude + "&sensor=false";
                     _this.$http
                         .get(URL)
                         .then(function (data) {
