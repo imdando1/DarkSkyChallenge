@@ -3,6 +3,7 @@ namespace darksky.Controllers {
     export class WeatherController {
         public weather;
         public date = new Date();
+        public position;
 
         public chart:any = {
             label: [],
@@ -29,8 +30,16 @@ namespace darksky.Controllers {
             }
         };
 
+        constructor(
+            private weatherService: darksky.Services.WeatherService,
+            private $geolocation: any, private $http:any){
+
+            this.getWeather();
+
+        }
+
         getWeather(){
-            this.weatherService.getWeathers().then((data)=>{
+            this.weatherService.getCurrentWeather().then((data:any)=>{
                 console.log(data);
                 this.weather = data;
                 this.setData(data.hourly.data);
@@ -38,23 +47,11 @@ namespace darksky.Controllers {
         }
 
         private setData(data) {
-            console.log(data);
             for(let i of data) {
-                console.log(i);
                 this.chart.label.push((new Date(i.time * 1000)).getHours());
                 this.chart.data[0].push(i.temperature);
                 this.chart.data[1].push(i.windSpeed);
             }
-            console.log(this.chart.data);
         }
-
-        constructor(private weatherService: darksky.Services.WeatherService){
-            this.getWeather();
-        }
-
     }
-
-
-
-
 }
