@@ -3,26 +3,41 @@ namespace darksky.Controllers {
     export class WeatherController {
         public weather;
         public date = new Date();
-        public position;
         public zip;
         public chart:any = chartOptions;
+        public hourlyTableOn = false;
+        public isReady = false;
+        public isLoading = true;
 
         constructor(
             private weatherService: darksky.Services.WeatherService,
-            private $geolocation: any, private $http:any){
+            private $geolocation: any,
+            private $uibModal: ng.ui.bootstrap.IModalService){
 
             this.getWeather();
 
         }
 
-
+        showWeekModal(){
+            this.$uibModal.open({
+                templateUrl: '/ngApp/views/weekDialog.html',
+                controller: darksky.Controllers.WeekController,
+                controllerAs: 'vm',
+                resolve: {
+                    address: ()=> this.weather.address
+                },
+                size: 'lg'
+            });
+        }
 
         getWeather(){
+            this.isLoading = true;
             this.weatherService.getCurrnetWeather(this.zip).then((data:any)=>{
-                console.log(data);
                 this.weather = data;
                 this.resetData();
                 this.setData(data.hourly.data);
+                this.isReady = true;
+                this.isLoading = false;
             });
         }
 

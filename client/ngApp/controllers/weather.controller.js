@@ -3,21 +3,38 @@ var darksky;
     var Controllers;
     (function (Controllers) {
         var WeatherController = (function () {
-            function WeatherController(weatherService, $geolocation, $http) {
+            function WeatherController(weatherService, $geolocation, $uibModal) {
                 this.weatherService = weatherService;
                 this.$geolocation = $geolocation;
-                this.$http = $http;
+                this.$uibModal = $uibModal;
                 this.date = new Date();
                 this.chart = chartOptions;
+                this.hourlyTableOn = false;
+                this.isReady = false;
+                this.isLoading = true;
                 this.getWeather();
             }
+            WeatherController.prototype.showWeekModal = function () {
+                var _this = this;
+                this.$uibModal.open({
+                    templateUrl: '/ngApp/views/weekDialog.html',
+                    controller: darksky.Controllers.WeekController,
+                    controllerAs: 'vm',
+                    resolve: {
+                        address: function () { return _this.weather.address; }
+                    },
+                    size: 'lg'
+                });
+            };
             WeatherController.prototype.getWeather = function () {
                 var _this = this;
+                this.isLoading = true;
                 this.weatherService.getCurrnetWeather(this.zip).then(function (data) {
-                    console.log(data);
                     _this.weather = data;
                     _this.resetData();
                     _this.setData(data.hourly.data);
+                    _this.isReady = true;
+                    _this.isLoading = false;
                 });
             };
             WeatherController.prototype.setData = function (data) {

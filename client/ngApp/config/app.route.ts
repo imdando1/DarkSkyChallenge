@@ -19,12 +19,12 @@ namespace darksky.Route {
                 controller: darksky.Controllers.HomeController,
                 controllerAs: 'vm'
             })
-            .state('week', {
-                url:'/week',
-                templateUrl: './ngApp/views/week.html',
-                controller: darksky.Controllers.WeekController,
-                controllerAs: 'vm'
-            })
+            // .state('week', {
+            //     url:'/week',
+            //     templateUrl: './ngApp/views/week.html',
+            //     controller: darksky.Controllers.WeekController,
+            //     controllerAs: 'vm'
+            // })
             .state('notFound', {
                 url: '/notFound',
                 templateUrl: './ngApp/views/notFound.html'

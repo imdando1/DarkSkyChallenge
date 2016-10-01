@@ -1,0 +1,25 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <h1>{{vm.address}}</h1>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-3 text-center daily-box" ng-repeat="w in vm.weeklyWeather.data">
+                <div class="daily-content">
+                    <h4>{{w.time * 1000 | date: 'longDate'}}</h4>
+                    <hr>
+                    <h1>
+                        <i class="wi wi-forecast-io-{{w.icon}} fa-2x"></i>
+                        {{w.temperature}}
+                    </h1>
+                    <hr>
+                    <h5>
+                        Hi: {{w.temperatureMax}} &deg;F / Low: {{w.temperatureMin}} &deg;F
+                    </h5>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -9,8 +9,16 @@ var darksky;
                 this.$http = $http;
                 this.coords = {};
                 this.weather = {};
-                this.weatherResource = $resource('/api/weather/:id');
+                this.weatherResource = $resource('/api/weather', null, {
+                    getWeek: {
+                        method: 'PUT',
+                        url: '/api/weather'
+                    }
+                });
             }
+            WeatherService.prototype.getWeeklyWeather = function () {
+                return this.weatherResource.getWeek(this.coords).$promise;
+            };
             WeatherService.prototype.getCurrnetWeather = function (zip) {
                 var _this = this;
                 return this.$q(function (resolve, reject) {
@@ -20,8 +28,10 @@ var darksky;
                             _this.$q.all([
                                 _this.weatherResource.save(_this.coords).$promise
                                     .then(function (weather) {
+                                    console.log(weather);
                                     _this.weather.currently = weather.hourly.data[(new Date()).getHours()];
                                     _this.weather.hourly = weather.hourly;
+                                    _this.weather.daily = weather.daily;
                                 }),
                                 _this.getZipByCoord().then(function () {
                                     _this.getAddressByZip().then(function (address) {
@@ -37,16 +47,13 @@ var darksky;
                     }
                     else {
                         _this.zip = zip;
-                        console.log('1. ' + _this.zip);
                         _this.$q.all([
                             _this.getCoordByZip(),
                             _this.getAddressByZip()
                                 .then(function (address) {
                                 _this.weather.address = address;
-                                console.log('2. ' + _this.weather.address);
                             })
                         ]).then(function () {
-                            console.log("then block work?");
                             _this.weatherResource.save(_this.coords).$promise
                                 .then(function (weather) {
                                 _this.weather.currently = weather.hourly.data[(new Date()).getHours()];
@@ -54,30 +61,9 @@ var darksky;
                                 resolve(_this.weather);
                             });
                         }).catch(function () {
-                            console.log('q all rejected');
                             reject();
                         });
                     }
-                });
-            };
-            WeatherService.prototype.getCurrentWeather1 = function () {
-                var _this = this;
-                return this.$q(function (resolve, reject) {
-                    _this.getCurrentPosition().then(function () {
-                        _this.weatherResource.save(_this.coords).$promise.then(function (weather) {
-                            _this.getZipByCoord().then(function () {
-                                _this.getAddressByZip().then(function (address) {
-                                    var currentWeather = {};
-                                    currentWeather.currently = weather.hourly.data[(new Date()).getHours()];
-                                    currentWeather.hourly = weather.hourly;
-                                    currentWeather.address = address;
-                                    resolve(currentWeather);
-                                });
-                            });
-                        }).catch(function (err) {
-                            reject(err);
-                        });
-                    });
                 });
             };
             WeatherService.prototype.getAddressByZip = function () {
@@ -103,11 +89,9 @@ var darksky;
                         var location = data.data.results[0].geometry.location;
                         _this.coords.latitude = location.lat;
                         _this.coords.longitude = location.lng;
-                        console.log(_this.coords);
                         resolve(_this.coords);
                     })
                         .catch(function () {
-                        console.log('rejected');
                         reject();
                     });
                 });

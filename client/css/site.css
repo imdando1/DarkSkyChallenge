@@ -1,3 +1,22 @@
 .table-borderless tbody tr td, .table-borderless tbody tr th, .table-borderless thead tr th {
     border: none;
 }
+
+.daily-box {
+    padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.daily-content {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px grey;
+    background-color:#d1f0ff;
+
+}
+
+.button-group {
+    padding-top: 5%;
+}

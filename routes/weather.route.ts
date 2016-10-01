@@ -1,13 +1,32 @@
 import * as express from 'express';
 import * as moment from 'moment';
-
 const DarkSky = require('dark-sky');
-const forecast = new DarkSky('c2d213db2446af41f1a291c2d08d7f15');
+
+
 
 
 let weatherRoute = express.Router();
 
+weatherRoute.put('/', (req, res)=>{
+    const forecast = new DarkSky('c2d213db2446af41f1a291c2d08d7f15');
+    forecast
+        .latitude(req.body.latitude)
+        .longitude(req.body.longitude)
+        .units('auto')
+        .language('en')
+        .exclude('flags')
+        .get()
+        .then((data)=>{
+
+            res.json(data.daily);
+        })
+        .catch((err)=>{
+            res.json(err);
+        });
+});
+
 weatherRoute.post('/', (req, res)=>{
+    const forecast = new DarkSky('c2d213db2446af41f1a291c2d08d7f15');
     console.log(req);
 
     let date = moment(new Date()).format('YYYYMMDD');
@@ -16,7 +35,7 @@ weatherRoute.post('/', (req, res)=>{
         .longitude(req.body.longitude)
         .units('auto')
         .language('en')
-        .exclude('minutely')
+        .exclude('minutely, flags')
         .time(date)
         .get()
         .then((data)=>{
@@ -27,9 +46,7 @@ weatherRoute.post('/', (req, res)=>{
         });
 });
 
-weatherRoute.post('/:weekly', (req, res)=>{
 
-});
 
 
 

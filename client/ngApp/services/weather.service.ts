@@ -12,8 +12,17 @@ namespace darksky.Services {
             private $q: ng.IQService,
             private $http: ng.IHttpService){
 
-            this.weatherResource = $resource('/api/weather/:id');
+            this.weatherResource = $resource('/api/weather', null, {
+                getWeek: {
+                    method: 'PUT',
+                    url: '/api/weather'
+                }
+            });
 
+        }
+
+        getWeeklyWeather(){
+            return this.weatherResource.getWeek(this.coords).$promise;
         }
 
         getCurrnetWeather(zip){
@@ -25,8 +34,10 @@ namespace darksky.Services {
 
                                 this.weatherResource.save(this.coords).$promise
                                     .then((weather:any)=>{
+                                        console.log(weather);
                                         this.weather.currently = weather.hourly.data[(new Date()).getHours()];
                                         this.weather.hourly = weather.hourly;
+                                        this.weather.daily = weather.daily;
                                 }),
 
                                 this.getZipByCoord().then(()=>{
@@ -42,17 +53,14 @@ namespace darksky.Services {
                         })
                 } else {
                     this.zip = zip;
-                    console.log('1. ' + this.zip);
 
                     this.$q.all([
                         this.getCoordByZip(),
                         this.getAddressByZip()
                             .then((address)=>{
                                 this.weather.address = address;
-                                console.log('2. ' + this.weather.address);
                             })
                     ]).then(()=>{
-                        console.log("then block work?")
                         this.weatherResource.save(this.coords).$promise
                             .then((weather:any)=>{
                                 this.weather.currently = weather.hourly.data[(new Date()).getHours()];
@@ -60,39 +68,11 @@ namespace darksky.Services {
                                 resolve(this.weather);
                         });
                     }).catch(()=>{
-                        console.log('q all rejected')
                         reject();
                     })
                 }
             });
         }
-
-
-        getCurrentWeather1() {
-            return this.$q((resolve, reject)=>{
-                this.getCurrentPosition().then(()=>{
-                    this.weatherResource.save(this.coords).$promise.then((weather:any)=>{
-                        this.getZipByCoord().then(()=>{
-                            this.getAddressByZip().then((address)=>{
-                                let currentWeather:any = {};
-                                currentWeather.currently = weather.hourly.data[(new Date()).getHours()];
-                                currentWeather.hourly = weather.hourly;
-                                currentWeather.address = address;
-                                // console.log(currentWeather);
-                                // weather.address = address;
-
-                                resolve(currentWeather);
-                            });
-                        });
-                    }).catch((err)=>{
-                        reject(err);
-                    });
-                });
-            });
-        }
-
-
-
 
         private getAddressByZip(){
             return this.$q((resolve, reject)=>{
@@ -107,7 +87,6 @@ namespace darksky.Services {
             });
         }
 
-//////////////////////////////////////////////////////////////
         private getCoordByZip(){
             return this.$q((resolve, reject)=>{
                 let URL = `http://maps.googleapis.com/maps/api/geocode/json?address=${this.zip}`;
@@ -119,12 +98,10 @@ namespace darksky.Services {
                         let location = data.data.results[0].geometry.location;
                         this.coords.latitude = location.lat;
                         this.coords.longitude = location.lng;
-                        console.log(this.coords)
 
                         resolve(this.coords)
                     })
                     .catch(()=>{
-                        console.log('rejected');
                         reject();
                     });
             });

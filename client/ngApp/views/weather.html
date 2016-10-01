@@ -1,6 +1,6 @@
 <div class="weather-main">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="form-group">
                 <form ng-submit="vm.getWeather()">
                     <div class="input-group">
@@ -8,37 +8,57 @@
                             <input type="submit" class="btn btn-primary" name="name" value="Get Weather!">
                         </span>
                         <input type="text" class="form-control" ng-model="vm.zip" placeholder="ZIP Code...">
+                        <span class="input-group-addon" >
+                            <i class="fa fa-spinner fa-spin fa-fw" ng-show="vm.isLoading"></i>
+                            <i class="fa fa-check fa-fw" ng-show="!vm.isLoading"></i>
+                        </span>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
+
+    <div class="row" ng-show="vm.isReady">
+        <div class="col-md-6">
             <h1>{{vm.weather.address}}</h1>
             <h3>{{vm.weather.currently.time * 1000 | date: 'longDate'}}</h3>
-            <h3>{{vm.weather.currently.summary}}</h3>
+            <h3>
+                {{vm.weather.currently.summary}}
+
+            </h3>
             <div class="row">
-                <div class="col-md-6">
-                    <h1>
-                        <i class="wi wi-forecast-io-{{vm.weather.currently.icon}} fa-2x"></i>
-                        {{vm.weather.currently.temperature}}
-                        <a href="#">&deg;F</a>
-                    </h1>
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <h1>
+                            <i class="wi wi-forecast-io-{{vm.weather.currently.icon}} fa-2x"></i>
+                            {{vm.weather.currently.temperature}}
+                            <a href="#">&deg;F</a>
+                        </h1>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Precipitation: {{vm.weather.currently.precipProbability * 100 | number: 0}}%</h4>
+                        <h4>Humidity: {{vm.weather.currently.humidity * 100 | number: 0}}%</h4>
+                        <h4>Wind: {{vm.weather.currently.windSpeed}} mph</h4>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <h4>Precipitation: {{vm.weather.currently.precipProbability * 100 | number: 0}}%</h4>
-                    <h4>Humidity: {{vm.weather.currently.humidity * 100 | number: 0}}%</h4>
-                    <h4>Wind: {{vm.weather.currently.windSpeed}} mph</h4>
+                <div class="col-md-12 button-group">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-warning btn-xs btn-block" ng-click="vm.showWeekModal()">Weekly forecast</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-info btn-xs btn-block" ng-click="vm.hourlyTableOn = !vm.hourlyTableOn">Hourly Details</button>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
 
-    </div>
-    <hr>
-    <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
 
             <table class="table table-borderless">
                 <tr>
@@ -57,7 +77,7 @@
                     <td>
                         <canvas id="line" class="chart chart-line" chart-data="vm.chart.data"
                         chart-labels="vm.chart.label" chart-series="vm.chart.series" chart-options="vm.chart.options"
-                        chart-dataset-override="vm.chart.datasetOverride" chart-click="onClick" height="70%">
+                        chart-dataset-override="vm.chart.datasetOverride" chart-click="onClick" >
                         </canvas>
                     </td>
                 </tr>
@@ -71,17 +91,14 @@
                     </td>
                 </tr>
             </table>
-
-
-
         </div>
     </div>
 </div>
 <hr>
 
-<div class="row">
+<div class="row" ng-show="vm.hourlyTableOn">
     <div class="col-md-12">
-        <table class="table table-condensed table-bordered">
+        <table class="table table-condensed">
             <tr>
                 <th>Hourly</th>
                 <th>Temperature</th>
@@ -94,7 +111,7 @@
             <tr ng-repeat='h in vm.weather.hourly.data'>
                 <td>{{h.time * 1000 | date: 'hh:mm a'}}</td>
                 <td>{{h.temperature}} &deg;F</td>
-                <td>{{h.precipitation * 100 | number:0}}%</td>
+                <td>{{h.precipProbability * 100 | number:0}}%</td>
                 <td>{{h.humidity * 100 | number:0}}%</td>
                 <td>{{h.windSpeed}} mph</td>
                 <td><i class="wi wi-forecast-io-{{h.icon}}"></i></td>
