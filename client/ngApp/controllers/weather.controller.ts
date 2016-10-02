@@ -31,6 +31,8 @@ namespace darksky.Controllers {
         }
 
         getWeather(){
+            this.hourlyTableOn = false
+            this.isReady = false;
             this.isLoading = true;
             this.weatherService.getCurrnetWeather(this.zip).then((data:any)=>{
                 this.weather = data;

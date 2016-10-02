@@ -28,6 +28,8 @@ var darksky;
             };
             WeatherController.prototype.getWeather = function () {
                 var _this = this;
+                this.hourlyTableOn = false;
+                this.isReady = false;
                 this.isLoading = true;
                 this.weatherService.getCurrnetWeather(this.zip).then(function (data) {
                     _this.weather = data;

@@ -14,6 +14,10 @@ var darksky;
                 controller: darksky.Controllers.HomeController,
                 controllerAs: 'vm'
             })
+                .state('about', {
+                url: '/about',
+                templateUrl: './ngApp/views/about.html',
+            })
                 .state('notFound', {
                 url: '/notFound',
                 templateUrl: './ngApp/views/notFound.html'

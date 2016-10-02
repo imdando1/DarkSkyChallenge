@@ -1,25 +1,46 @@
 <div class="modal-content">
     <div class="modal-header">
-        <h1>{{vm.address}}</h1>
+        <div class="col-md-10">
+            <h1>
+                {{vm.address}}
+                <i class="fa fa-spinner fa-pulse fa-fw" ng-show="!vm.isReady"></i>
+            </h1>
+        </div>
+        <div class="col-md-2 text-right">
+            <button type="button" class="btn btn-danger btn-xs" ng-click="vm.close()">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+
     </div>
 
     <div class="modal-body">
-        <div class="row">
-            <div class="col-md-3 text-center daily-box" ng-repeat="w in vm.weeklyWeather.data">
-                <div class="daily-content">
-                    <h4>{{w.time * 1000 | date: 'longDate'}}</h4>
-                    <hr>
-                    <h1>
-                        <i class="wi wi-forecast-io-{{w.icon}} fa-2x"></i>
-                        {{w.temperature}}
-                    </h1>
-                    <hr>
-                    <h5>
-                        Hi: {{w.temperatureMax}} &deg;F / Low: {{w.temperatureMin}} &deg;F
-                    </h5>
-                </div>
+        <div class="animate-show" ng-show="vm.isReady">
+            <div class="row" >
+                <div class="col-md-3 text-center daily-box add-box" ng-repeat="w in vm.weeklyWeather.data">
+                    <div class="daily-content">
+                        <h4>{{w.time * 1000 | date: 'longDate'}}</h4>
+                        <hr>
+                        <h1>
+                            <i class="wi wi-forecast-io-{{w.icon}} fa-2x"></i>
+                            {{w.temperature}}
+                        </h1>
+                        <hr>
+                        <h5>
+                            Hi: {{w.temperatureMax}} &deg;F / Low: {{w.temperatureMin}} &deg;F
+                        </h5>
+                    </div>
 
+                </div>
             </div>
+            <!-- <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <input type="button" class="btn btn-primary btn-block btn-xs" ng-click=vm.close() value="close">
+                    </div>
+                </div>
+            </div> -->
         </div>
+
     </div>
 </div>
