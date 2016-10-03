@@ -1,15 +1,9 @@
 namespace darksky.Controllers {
 
-
-
     export class HomeController {
-        public message = "super awesome!!!";
-
-        constructor(private weatherService: darksky.Services.WeatherService){
-        }
-
-        
-
+        public message = "Simple Weather"
     }
+
+    //angular.module('darksky').controller('homeController', HomeController);
 
 }

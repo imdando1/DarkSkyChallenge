@@ -21,6 +21,7 @@
     "angular-touch": "^1.5.5",
     "animate.css": "^3.5.1",
     "angular-chart.js": "^1.0.3",
-    "ngGeolocation": "^0.0.8"
+    "ngGeolocation": "^0.0.8",
+    "angular-mocks": "^1.5.8"
   }
 }
