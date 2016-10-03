@@ -2,9 +2,10 @@
 var express = require('express');
 var moment = require('moment');
 var DarkSky = require('dark-sky');
+var DARKSKY_KEY = process.env.DARKSKY_KEY;
 var weatherRoute = express.Router();
 weatherRoute.put('/', function (req, res) {
-    var forecast = new DarkSky('c2d213db2446af41f1a291c2d08d7f15');
+    var forecast = new DarkSky(DARKSKY_KEY);
     forecast
         .latitude(req.body.latitude)
         .longitude(req.body.longitude)
@@ -20,7 +21,7 @@ weatherRoute.put('/', function (req, res) {
     });
 });
 weatherRoute.post('/', function (req, res) {
-    var forecast = new DarkSky('c2d213db2446af41f1a291c2d08d7f15');
+    var forecast = new DarkSky(DARKSKY_KEY);
     console.log(req);
     var date = moment(new Date()).format('YYYYMMDD');
     forecast

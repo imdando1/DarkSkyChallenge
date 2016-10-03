@@ -2,8 +2,8 @@
     angular
         .module('darksky')
         .config(router);
-    router.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider'];
-    function router($stateProvider, $urlRouterProvider, $locationProvider) {
+    router.$inject = ['$locationProvider', '$stateProvider', '$urlRouterProvider'];
+    function router($locationProvider, $stateProvider, $urlRouterProvider) {
         $stateProvider
             .state('home', {
             url: '/',

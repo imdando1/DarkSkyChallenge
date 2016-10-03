@@ -1,5 +1,6 @@
 (function(){
 
+    // create weather component in darksky module
     angular
         .module('darksky')
         .component('weather', {
@@ -7,5 +8,5 @@
             controller: 'weatherController',
             controllerAs: 'vm'
         });
-        
+
 })();

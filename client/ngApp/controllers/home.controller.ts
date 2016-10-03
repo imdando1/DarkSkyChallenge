@@ -1,7 +1,11 @@
 (function(){
+
     class HomeController {
-        public message = "Simple Weather"
+        public message = "Hello L4 Digital! Thanks for the opportunity! -Dan-"
     }
 
-    angular.module('darksky').controller('homeController', HomeController);
+    angular
+        .module('darksky')
+        .controller('homeController', HomeController);
+
 })();

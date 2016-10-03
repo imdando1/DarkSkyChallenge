@@ -3,13 +3,13 @@
         .module('darksky')
         .config(router);
 
-    router.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider'];
+    router.$inject = ['$locationProvider', '$stateProvider', '$urlRouterProvider'];
 
     function router (
+        $locationProvider: ng.ILocationProvider,
         $stateProvider: ng.ui.IStateProvider,
-        $urlRouterProvider: ng.ui.IUrlRouterProvider,
-        $locationProvider: ng.ILocationProvider
-    ){
+        $urlRouterProvider: ng.ui.IUrlRouterProvider){
+            
         // Define routes
         $stateProvider
             .state('home', {

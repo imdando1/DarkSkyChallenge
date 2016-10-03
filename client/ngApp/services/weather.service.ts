@@ -1,11 +1,26 @@
 namespace darksky.Services {
+    // interface for WeatherService.
+    //Wrapped in namespace so that it can be access easily from other files.
+    export interface IWeatherService {
+        getCurrnetWeather(zip);
+        getWeeklyWeather();
+    }
+}
 
-    export class WeatherService {
-        private weatherResource;
+
+(function(){
+
+    class WeatherService {
+        // private fields
         private coords:any = {};
-        private zip;
         private weather:any = {};
+        private weatherResource;
+        private zip;
 
+        // $inject for minification
+        static $inject = ['$resource', '$geolocation', '$q', '$http'];
+
+        // constructor
         constructor(
             $resource: ng.resource.IResourceService,
             private $geolocation:any,
@@ -18,66 +33,15 @@ namespace darksky.Services {
                     url: '/api/weather'
                 }
             });
-
         }
 
-        getWeeklyWeather(){
-            return this.weatherResource.getWeek(this.coords).$promise;
-        }
-
-        getCurrnetWeather(zip){
-            return this.$q((resolve, reject)=>{
-                if(!zip){
-                    this.getCurrentPosition()
-                        .then(()=>{
-                            this.$q.all([
-
-                                this.weatherResource.save(this.coords).$promise
-                                    .then((weather:any)=>{
-                                        console.log(weather);
-                                        this.weather.currently = weather.hourly.data[(new Date()).getHours()];
-                                        this.weather.hourly = weather.hourly;
-                                        this.weather.daily = weather.daily;
-                                }),
-
-                                this.getZipByCoord().then(()=>{
-                                    this.getAddressByZip().then((address)=>{
-                                        this.weather.address = address;
-                                    });
-                                })
-                            ]).then(()=>{
-                                resolve(this.weather);
-                            }).catch(()=>{
-                                reject();
-                            });
-                        })
-                } else {
-                    this.zip = zip;
-
-                    this.$q.all([
-                        this.getCoordByZip(),
-                        this.getAddressByZip()
-                            .then((address)=>{
-                                this.weather.address = address;
-                            })
-                    ]).then(()=>{
-                        this.weatherResource.save(this.coords).$promise
-                            .then((weather:any)=>{
-                                this.weather.currently = weather.hourly.data[(new Date()).getHours()];
-                                this.weather.hourly = weather.hourly;
-                                resolve(this.weather);
-                        });
-                    }).catch(()=>{
-                        reject();
-                    })
-                }
-            });
-        }
-
+        // private methods
         private getAddressByZip(){
             return this.$q((resolve, reject)=>{
+                let URL = `https://maps.googleapis.com/maps/api/geocode/json?address=${this.zip}`;
+
                 this.$http
-                    .get(`https://maps.googleapis.com/maps/api/geocode/json?address=${this.zip}`)
+                    .get(URL)
                     .then((data:any)=>{
                         resolve(data.data.results[0].formatted_address)
                     })
@@ -107,6 +71,24 @@ namespace darksky.Services {
             });
         }
 
+        private getCurrentPosition(){
+            return this.$q((resolve, reject)=>{
+
+                this.$geolocation.getCurrentPosition({
+                    timeout: 60000
+                }).then((position)=> {
+                    if(position){
+                        this.coords.latitude = position.coords.latitude;
+                        this.coords.longitude = position.coords.longitude;
+
+                        resolve();
+                    } else {
+                        reject();
+                    }
+                });
+            });
+        }
+
         private getZipByCoord(){
             return this.$q((resolve, reject)=>{
                 let URL = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.coords.latitude},${this.coords.longitude}&sensor=false`
@@ -125,23 +107,68 @@ namespace darksky.Services {
             });
         }
 
-        private getCurrentPosition(){
+        // public methods
+        getCurrnetWeather(zip){
             return this.$q((resolve, reject)=>{
-                this.$geolocation.getCurrentPosition({
-                    timeout: 60000
-                }).then((position)=> {
-                    if(position){
-                        this.coords.latitude = position.coords.latitude;
-                        this.coords.longitude = position.coords.longitude;
-                        resolve();
-                    } else {
+                if(!zip){
+                    // get current position
+                    this.getCurrentPosition()
+                        .then(()=>{
+                            // then get weather data and address at the same time
+                            this.$q.all([
+                                // get weather info
+                                this.weatherResource.save(this.coords).$promise
+                                    .then((weather:any)=>{
+                                        this.weather.currently = weather.hourly.data[(new Date()).getHours()];
+                                        this.weather.hourly = weather.hourly;
+                                        this.weather.daily = weather.daily;
+                                }),
+                                // get zip/address using coord
+                                this.getZipByCoord().then(()=>{
+                                    this.getAddressByZip().then((address)=>{
+                                        this.weather.address = address;
+                                    });
+                                })
+                            ]).then(()=>{
+                                resolve(this.weather);
+                            }).catch(()=>{
+                                reject();
+                            });
+                        })
+                } else {
+                    this.zip = zip;
+
+                    // get coords and address at the smae time
+                    this.$q.all([
+                        // get coord using zip
+                        this.getCoordByZip(),
+                        // get address by zip
+                        this.getAddressByZip()
+                            .then((address)=>{
+                                this.weather.address = address;
+                            })
+                    ]).then(()=>{
+                        // once coord and address is available, get weather info
+                        this.weatherResource.save(this.coords).$promise
+                            .then((weather:any)=>{
+                                this.weather.currently = weather.hourly.data[(new Date()).getHours()];
+                                this.weather.hourly = weather.hourly;
+                                resolve(this.weather);
+                        });
+                    }).catch(()=>{
                         reject();
-                    }
-                });
+                    })
+                }
             });
+        }
+
+        getWeeklyWeather(){
+            return this.weatherResource.getWeek(this.coords).$promise;
         }
     }
 
-    angular.module('darksky').service('weatherService', WeatherService);
+    angular
+        .module('darksky')
+        .service('weatherService', WeatherService);
 
-}
+})();

@@ -1,45 +1,46 @@
 (function(){
-    class WeatherController {
-        public weather;
-        public date = new Date();
-        public zip;
-        public chart:any = chartOptions;
-        public hourlyTableOn = false;
-        public isReady = false;
-        public isLoading = true;
 
+    interface IWeatherController {
+        // public fields
+        chart: any;
+        date: Date;
+        hourlyTableOn: boolean;
+        isLoading: boolean;
+        isReady: boolean;
+        weather: any;
+        zip: number;
+        // public methods
+        getWeather();
+        showWeekModal();
+    }
+
+    class WeatherController implements IWeatherController{
+        // public fields
+        public chart = chartOptions;
+        public date = new Date();
+        public hourlyTableOn = false;
+        public isLoading = true;
+        public isReady = false;
+        public weather;
+        public zip;
+
+        // $inject for minification
+        static $inject = ['$geolocation', '$uibModal', 'weatherService'];
+        
+        // constructor
         constructor(
-            private weatherService: darksky.Services.WeatherService,
             private $geolocation: any,
-            private $uibModal: ng.ui.bootstrap.IModalService){
+            private $uibModal: ng.ui.bootstrap.IModalService,
+            private weatherService: darksky.Services.IWeatherService){
 
             this.getWeather();
-
         }
 
-        showWeekModal(){
-            this.$uibModal.open({
-                templateUrl: '/ngApp/views/weekDialog.html',
-                controller: 'weekController',
-                controllerAs: 'vm',
-                resolve: {
-                    address: ()=> this.weather.address
-                },
-                size: 'lg'
-            });
-        }
-
-        getWeather(){
-            this.hourlyTableOn = false
-            this.isReady = false;
-            this.isLoading = true;
-            this.weatherService.getCurrnetWeather(this.zip).then((data:any)=>{
-                this.weather = data;
-                this.resetData();
-                this.setData(data.hourly.data);
-                this.isReady = true;
-                this.isLoading = false;
-            });
+        // private methods
+        private resetData(){
+            this.chart.label.length = 0;
+            this.chart.data[0].length = 0;
+            this.chart.data[1].length = 0;
         }
 
         private setData(data) {
@@ -50,14 +51,34 @@
             }
         }
 
-        private resetData(){
-            this.chart.label.length = 0;
-            this.chart.data[0].length = 0;
-            this.chart.data[1].length = 0;
+        // public methods
+        getWeather(){
+            this.hourlyTableOn = false
+            this.isLoading = true;
+            this.isReady = false;
+
+            this.weatherService.getCurrnetWeather(this.zip).then((data:any)=>{
+                this.weather = data;
+                this.resetData();
+                this.setData(data.hourly.data);
+                this.isLoading = false;
+                this.isReady = true;
+            });
+        }
+
+        showWeekModal(){
+            // opens modal
+            this.$uibModal.open({
+                templateUrl: '/ngApp/views/weekDialog.html',
+                controller: 'weekController',
+                controllerAs: 'vm',
+                resolve: {
+                    address: ()=> this.weather.address
+                },
+                size: 'lg'
+            });
         }
     }
-
-
 
     let chartOptions = {
         label: [],
@@ -84,6 +105,8 @@
         }
     };
 
-    angular.module('darksky').controller('weatherController', WeatherController);
+    angular
+        .module('darksky')
+        .controller('weatherController', WeatherController);
 
 })();

@@ -1,15 +1,15 @@
 (function () {
     var WeekController = (function () {
-        function WeekController(weatherService, address, $window, $scope, $uibModalInstance) {
-            this.weatherService = weatherService;
-            this.address = address;
-            this.$window = $window;
+        function WeekController($scope, $uibModalInstance, $window, weatherService, address) {
             this.$scope = $scope;
             this.$uibModalInstance = $uibModalInstance;
+            this.$window = $window;
+            this.weatherService = weatherService;
+            this.address = address;
+            this.isReady = false;
             this.weeklyWeather = {
                 data: []
             };
-            this.isReady = false;
             this.getWeeklyWeather();
         }
         WeekController.prototype.close = function () {
@@ -20,7 +20,6 @@
             this.weatherService.getWeeklyWeather().then(function (data) {
                 var i = 0;
                 var weatherData = _this.$window.setInterval(function () {
-                    console.log(data.data[i]);
                     _this.weeklyWeather.data.push(data.data[i]);
                     i++;
                     if (i == data.data.length)
@@ -30,7 +29,10 @@
                 _this.isReady = true;
             });
         };
+        WeekController.$inject = ['$scope', '$uibModalInstance', '$window', 'weatherService', 'address'];
         return WeekController;
     }());
-    angular.module('darksky').controller('weekController', WeekController);
+    angular
+        .module('darksky')
+        .controller('weekController', WeekController);
 })();
