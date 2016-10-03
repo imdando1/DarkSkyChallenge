@@ -1,6 +1,5 @@
-namespace darksky.Controllers {
-
-    export class WeekController {
+(function(){
+    class WeekController {
         public weeklyWeather = {
             data: []
         };
@@ -40,5 +39,4 @@ namespace darksky.Controllers {
     }
 
     angular.module('darksky').controller('weekController', WeekController);
-
-}
+})();

@@ -1,11 +1,10 @@
-namespace darksky.Config {
+(function(){
 
     angular
         .module('darksky')
         .config(configuration);
 
-    //configuration.$inject = ['darkSkyProvider', 'apikeyProvider'];
-
     function configuration(){
     }
-}
+
+})();

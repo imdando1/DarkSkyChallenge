@@ -1,6 +1,5 @@
-namespace darksky.Controllers {
-
-    export class WeatherController {
+(function(){
+    class WeatherController {
         public weather;
         public date = new Date();
         public zip;
@@ -21,7 +20,7 @@ namespace darksky.Controllers {
         showWeekModal(){
             this.$uibModal.open({
                 templateUrl: '/ngApp/views/weekDialog.html',
-                controller: darksky.Controllers.WeekController,
+                controller: 'weekController',
                 controllerAs: 'vm',
                 resolve: {
                     address: ()=> this.weather.address
@@ -59,6 +58,7 @@ namespace darksky.Controllers {
     }
 
 
+
     let chartOptions = {
         label: [],
         data: [[],[]],
@@ -83,4 +83,7 @@ namespace darksky.Controllers {
             }
         }
     };
-}
+
+    angular.module('darksky').controller('weatherController', WeatherController);
+
+})();

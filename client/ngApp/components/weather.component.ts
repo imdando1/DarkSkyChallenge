@@ -1,11 +1,11 @@
-namespace darksky.Components {
+(function(){
 
     angular
         .module('darksky')
         .component('weather', {
             templateUrl:'/ngApp/views/weather.html',
-            controller: darksky.Controllers.WeatherController,
+            controller: 'weatherController',
             controllerAs: 'vm'
         });
-
-}
+        
+})();

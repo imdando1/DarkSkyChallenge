@@ -1,5 +1,4 @@
-namespace darksky.Route {
-
+(function(){
     angular
         .module('darksky')
         .config(router);
@@ -16,7 +15,7 @@ namespace darksky.Route {
             .state('home', {
                 url: '/',
                 templateUrl: './ngApp/views/home.html',
-                controller: darksky.Controllers.HomeController,
+                controller: 'homeController',
                 controllerAs: 'vm'
             })
             .state('about', {
@@ -34,5 +33,4 @@ namespace darksky.Route {
         // Enable HTML5 navigation
         $locationProvider.html5Mode(true);
     }
-
-}
+})();
