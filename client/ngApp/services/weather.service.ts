@@ -43,7 +43,12 @@ namespace darksky.Services {
                 this.$http
                     .get(URL)
                     .then((data:any)=>{
-                        resolve(data.data.results[0].formatted_address)
+                        if(data.data.results[0]) {
+                            resolve(data.data.results[0].formatted_address)
+                        } else {
+                            reject();
+                        }
+
                     })
                     .catch(()=>{
                         reject();
@@ -58,12 +63,16 @@ namespace darksky.Services {
                 this.$http
                     .get(URL)
                     .then((data:any)=>{
+                        if(data.data.results[0]) {
+                            let location = data.data.results[0].geometry.location;
+                            this.coords.latitude = location.lat;
+                            this.coords.longitude = location.lng;
 
-                        let location = data.data.results[0].geometry.location;
-                        this.coords.latitude = location.lat;
-                        this.coords.longitude = location.lng;
+                            resolve(this.coords)
+                        } else {
+                            reject();
+                        }
 
-                        resolve(this.coords)
                     })
                     .catch(()=>{
                         reject();
@@ -122,12 +131,19 @@ namespace darksky.Services {
                                         this.weather.currently = weather.hourly.data[(new Date()).getHours()];
                                         this.weather.hourly = weather.hourly;
                                         this.weather.daily = weather.daily;
-                                }),
+                                    })
+                                    .catch(()=>{
+                                        reject();
+                                    }),
                                 // get zip/address using coord
                                 this.getZipByCoord().then(()=>{
-                                    this.getAddressByZip().then((address)=>{
-                                        this.weather.address = address;
-                                    });
+                                    this.getAddressByZip()
+                                        .then((address)=>{
+                                            this.weather.address = address;
+                                        })
+                                        .catch(()=>{
+                                            reject();
+                                        });
                                 })
                             ]).then(()=>{
                                 resolve(this.weather);
@@ -147,6 +163,9 @@ namespace darksky.Services {
                             .then((address)=>{
                                 this.weather.address = address;
                             })
+                            .catch(()=>{
+                                reject();
+                            })
                     ]).then(()=>{
                         // once coord and address is available, get weather info
                         this.weatherResource.save(this.coords).$promise
@@ -154,7 +173,10 @@ namespace darksky.Services {
                                 this.weather.currently = weather.hourly.data[(new Date()).getHours()];
                                 this.weather.hourly = weather.hourly;
                                 resolve(this.weather);
-                        });
+                            })
+                            .catch(()=>{
+                                reject()
+                            });
                     }).catch(()=>{
                         reject();
                     })
@@ -168,7 +190,7 @@ namespace darksky.Services {
     }
 
     angular
-        .module('darksky')
+        .module('services')
         .service('weatherService', WeatherService);
 
 })();

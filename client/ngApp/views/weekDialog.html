@@ -6,7 +6,7 @@
                 <i class="fa fa-spinner fa-pulse fa-fw" ng-show="!vm.isReady"></i>
             </h1>
         </div>
-        <div class="col-md-2 text-right">
+        <div class="col-md-2 text-right close-box">
             <button type="button" class="btn btn-danger btn-xs" ng-click="vm.close()">
                 <i class="fa fa-times" aria-hidden="true"></i>
             </button>
@@ -26,9 +26,30 @@
                             {{w.temperature}}
                         </h1>
                         <hr>
-                        <h5>
-                            Hi: {{w.temperatureMax}} &deg;F / Low: {{w.temperatureMin}} &deg;F
-                        </h5>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-6 text-right highlow-box-left">
+                                    <h5><span class="high">High</span>:</h5>
+                                </div>
+                                <div class="col-md-6 text-left highlow-box-right">
+                                    <h5>{{w.temperatureMax}} &deg;F</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="col-md-6 text-right highlow-box-left">
+                                    <h5><span class="low">Low</span>:</h5>
+                                </div>
+                                <div class="col-md-6 text-left highlow-box-right">
+                                    <h5> {{w.temperatureMin}} &deg;F</h5>
+                                </div>
+                            </div>
+                            <!-- <h5>
+                                <span class="high">High</span>: {{w.temperatureMax}} &deg;F
+                                <br>
+                                <span class="low">Low</span>: {{w.temperatureMin}} &deg;F
+                            </h5> -->
+                        </div>
+
                     </div>
 
                 </div>

@@ -18,6 +18,7 @@
         // public fields
         public chart = chartOptions;
         public date = new Date();
+        public errorMessage = "";
         public hourlyTableOn = false;
         public isLoading = true;
         public isReady = false;
@@ -26,7 +27,7 @@
 
         // $inject for minification
         static $inject = ['$geolocation', '$uibModal', 'weatherService'];
-        
+
         // constructor
         constructor(
             private $geolocation: any,
@@ -56,14 +57,21 @@
             this.hourlyTableOn = false
             this.isLoading = true;
             this.isReady = false;
+            this.errorMessage = '';
 
-            this.weatherService.getCurrnetWeather(this.zip).then((data:any)=>{
-                this.weather = data;
-                this.resetData();
-                this.setData(data.hourly.data);
-                this.isLoading = false;
-                this.isReady = true;
-            });
+            this.weatherService.getCurrnetWeather(this.zip)
+                .then((data:any)=>{
+                    this.weather = data;
+                    this.resetData();
+                    this.setData(data.hourly.data);
+                    this.isLoading = false;
+                    this.isReady = true;
+                })
+                .catch(()=>{
+                    this.errorMessage = "Invalid zip code";
+                    this.zip = null;
+                    this.isLoading = false;
+                });
         }
 
         showWeekModal(){
@@ -106,7 +114,7 @@
     };
 
     angular
-        .module('darksky')
+        .module('controllers')
         .controller('weatherController', WeatherController);
 
 })();

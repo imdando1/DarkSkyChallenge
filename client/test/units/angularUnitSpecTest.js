@@ -1,24 +1,18 @@
 describe('Testing Angular Specs: ', function () {
-    beforeEach(angular.mock.module('ui.router', []));
-    beforeEach(angular.mock.module('ngResource', []));
-    beforeEach(angular.mock.module('ui.bootstrap', []));
-    beforeEach(angular.mock.module('chart.js', []));
-    beforeEach(angular.mock.module('ui.router', []));
-    beforeEach(angular.mock.module('ngAnimate', []));
-    beforeEach(angular.mock.module('darksky'));
-    describe('Controller > ', function () {
-        var $controller;
-        beforeEach(inject(function (_$controller_) {
-            $controller = _$controller_;
-        }));
-        describe('homeController ', function () {
-            it('should exist > ', function () {
+    beforeEach(angular.mock.module('controllers'));
+    describe('Controllers >> ', function () {
+        var ctrl;
+        describe('homeController', function () {
+            beforeEach(angular.mock.inject(function ($controller) {
+                ctrl = $controller('homeController', {});
+            }));
+            it('should exist', function () {
+                expect(ctrl).toBeDefined();
+            });
+            it('should have message field', function () {
+                expect(ctrl.message).toBeDefined();
+                expect(ctrl.message).toBe("Hello L4 Digital! Thanks for the opportunity! -Dan-");
             });
         });
-    });
-});
-describe('A sample test', function () {
-    it('should be working', function () {
-        expect(5).toBe(5);
     });
 });

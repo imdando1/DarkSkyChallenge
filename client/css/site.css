@@ -1,5 +1,13 @@
-.table-borderless tbody tr td, .table-borderless tbody tr th, .table-borderless thead tr th {
-    border: none;
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+.button-group {
+    padding-top: 5%;
+}
+
+.close-box {
+    padding-right: 0 !important;
 }
 
 .daily-box {
@@ -11,16 +19,29 @@
 .daily-content {
     padding-top: 5px;
     padding-bottom: 5px;
-    border-radius: 5px;
+    border-radius: 0;
     box-shadow: 5px 5px 5px grey;
-    background-color:#d1f0ff;
-
+    border: 1px solid black;
 }
 
-.button-group {
-    padding-top: 5%;
+.high {
+    color: red;
 }
 
+.low {
+    color: blue;
+}
+
+.highlow-box-left {
+    padding-right: 5px !important;
+}
+.highlow-box-right {
+    padding-left: 0 !important;
+}
+
+.table-borderless tbody tr td, .table-borderless tbody tr th, .table-borderless thead tr th {
+    border: none;
+}
 
 
 .animate-show.ng-hide-add, .animate-show.ng-hide-remove {
@@ -43,14 +64,10 @@
     opacity: 1;
 }
 
-/* when hiding the picture */
 .main-box.ng-hide-add         { animation:0.5s lightSpeedOut ease; }
 
-/* when showing the picture */
 .main-box.ng-hide-remove      { animation:0.5s flipInX ease; }
 
-/* ANIMATIONS (FROM ANIMATE.CSS) ======================== */
-/* flip in */
 @keyframes flipInX {
   0% {
     transform: perspective(400px) rotate3d(1, 0, 0, 90deg);

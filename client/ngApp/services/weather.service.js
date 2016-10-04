@@ -20,7 +20,12 @@
                 _this.$http
                     .get(URL)
                     .then(function (data) {
-                    resolve(data.data.results[0].formatted_address);
+                    if (data.data.results[0]) {
+                        resolve(data.data.results[0].formatted_address);
+                    }
+                    else {
+                        reject();
+                    }
                 })
                     .catch(function () {
                     reject();
@@ -34,10 +39,15 @@
                 _this.$http
                     .get(URL)
                     .then(function (data) {
-                    var location = data.data.results[0].geometry.location;
-                    _this.coords.latitude = location.lat;
-                    _this.coords.longitude = location.lng;
-                    resolve(_this.coords);
+                    if (data.data.results[0]) {
+                        var location_1 = data.data.results[0].geometry.location;
+                        _this.coords.latitude = location_1.lat;
+                        _this.coords.longitude = location_1.lng;
+                        resolve(_this.coords);
+                    }
+                    else {
+                        reject();
+                    }
                 })
                     .catch(function () {
                     reject();
@@ -91,10 +101,17 @@
                                 _this.weather.currently = weather.hourly.data[(new Date()).getHours()];
                                 _this.weather.hourly = weather.hourly;
                                 _this.weather.daily = weather.daily;
+                            })
+                                .catch(function () {
+                                reject();
                             }),
                             _this.getZipByCoord().then(function () {
-                                _this.getAddressByZip().then(function (address) {
+                                _this.getAddressByZip()
+                                    .then(function (address) {
                                     _this.weather.address = address;
+                                })
+                                    .catch(function () {
+                                    reject();
                                 });
                             })
                         ]).then(function () {
@@ -112,12 +129,18 @@
                             .then(function (address) {
                             _this.weather.address = address;
                         })
+                            .catch(function () {
+                            reject();
+                        })
                     ]).then(function () {
                         _this.weatherResource.save(_this.coords).$promise
                             .then(function (weather) {
                             _this.weather.currently = weather.hourly.data[(new Date()).getHours()];
                             _this.weather.hourly = weather.hourly;
                             resolve(_this.weather);
+                        })
+                            .catch(function () {
+                            reject();
                         });
                     }).catch(function () {
                         reject();
@@ -132,6 +155,6 @@
         return WeatherService;
     }());
     angular
-        .module('darksky')
+        .module('services')
         .service('weatherService', WeatherService);
 })();

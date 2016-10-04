@@ -6,6 +6,7 @@
             this.weatherService = weatherService;
             this.chart = chartOptions;
             this.date = new Date();
+            this.errorMessage = "";
             this.hourlyTableOn = false;
             this.isLoading = true;
             this.isReady = false;
@@ -29,12 +30,19 @@
             this.hourlyTableOn = false;
             this.isLoading = true;
             this.isReady = false;
-            this.weatherService.getCurrnetWeather(this.zip).then(function (data) {
+            this.errorMessage = '';
+            this.weatherService.getCurrnetWeather(this.zip)
+                .then(function (data) {
                 _this.weather = data;
                 _this.resetData();
                 _this.setData(data.hourly.data);
                 _this.isLoading = false;
                 _this.isReady = true;
+            })
+                .catch(function () {
+                _this.errorMessage = "Invalid zip code";
+                _this.zip = null;
+                _this.isLoading = false;
             });
         };
         WeatherController.prototype.showWeekModal = function () {
@@ -77,6 +85,6 @@
         }
     };
     angular
-        .module('darksky')
+        .module('controllers')
         .controller('weatherController', WeatherController);
 })();

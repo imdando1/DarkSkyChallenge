@@ -30,7 +30,6 @@ app.use('/css', express.static(path.join(__dirname, 'client/css')));
 app.use('/api', express.static(path.join(__dirname, 'api')));
 
 app.use('/', routes);
-app.use('/users', users);
 app.use('/api/weather', weatherRoute);
 
 

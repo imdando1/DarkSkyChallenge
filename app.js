@@ -5,7 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var index_1 = require('./routes/index');
-var users_1 = require('./routes/users');
 var weather_route_1 = require('./routes/weather.route');
 var app = express();
 app.set('views', path.join(__dirname, 'views'));
@@ -21,7 +20,6 @@ app.use('/ngApp', express.static(path.join(__dirname, 'client/ngApp')));
 app.use('/css', express.static(path.join(__dirname, 'client/css')));
 app.use('/api', express.static(path.join(__dirname, 'api')));
 app.use('/', index_1.default);
-app.use('/users', users_1.default);
 app.use('/api/weather', weather_route_1.default);
 app.get('/*', function (req, res, next) {
     if (/.js|.html|.css|templates|js|scripts/.test(req.path) || req.xhr) {

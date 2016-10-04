@@ -17,20 +17,8 @@ module.exports = function(config) {
         files: [
             '../../bower_components/angular/angular.js',
             '../../bower_components/angular-mocks/angular-mocks.js',
-            // '../../bower_components/angular-ui-router/release/angular-ui-router.min.js',
-            // '../../bower_components/angular-resource/angular-resource.min.js',
-            // '../../bower_components/angular-animate/angular-animate.min.js',
-            // '../../bower_components/angular-touch/angular-touch.min.js',
-            // '../../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
-            // '../../bower_componetns/ngGeolocation/ngGeolocation.js',
             '../ngApp/app.js',
-            // '../ngApp/config/app.config.js',
-            // '../ngApp/config/app.route.js',
-            // '../ngApp/services/weather.service.js',
             '../ngApp/controllers/home.controller.js',
-            // '../ngApp/controllers/weather.controller.js'
-            // '../ngApp/controllers/week.controller.js',
-            // '../ngApp/components/weather.component.js',
             'units/*.js'
         ],
 
