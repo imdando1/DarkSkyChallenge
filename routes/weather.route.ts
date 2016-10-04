@@ -2,7 +2,7 @@ import * as express from 'express';
 import * as moment from 'moment';
 const DarkSky = require('dark-sky');
 
-const DARKSKY_KEY = process.env.DARKSKY_KEY;
+const DARKSKY_KEY = process.env.DARKSKY_KEY || 'c2d213db2446af41f1a291c2d08d7f15';
 
 let weatherRoute = express.Router();
 

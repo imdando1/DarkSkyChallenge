@@ -2,7 +2,7 @@
 var express = require('express');
 var moment = require('moment');
 var DarkSky = require('dark-sky');
-var DARKSKY_KEY = process.env.DARKSKY_KEY;
+var DARKSKY_KEY = process.env.DARKSKY_KEY || 'c2d213db2446af41f1a291c2d08d7f15';
 var weatherRoute = express.Router();
 weatherRoute.put('/', function (req, res) {
     var forecast = new DarkSky(DARKSKY_KEY);
